@@ -54,19 +54,25 @@ while True:
     while text and text[-1] != " " and i < 10:
         i += 1
         next_char = predict_next(next_context, beforeList[c])
-        if not next_char:
+        if not next_char or next_char == " ":
             c -= 1
+            i -= 1
             if c < 0:
                 break
-        if next_char == " ":
-            break
-        recommended_word += next_char
-        next_context = (next_context + next_char)[-checkBefore:]
+        else:
+            c = checkBefore-1
+            recommended_word += next_char
+            next_context = (next_context + next_char)[-checkBefore:]
+        #if next_char == " " and recommended_word != "":
+        #    break
 
     print(text.split(" ")[-1] + recommended_word)
     print(text)
     char = getch.getch().replace("\x7f", "\b")
     if char != "\b":
-        text += char
+        if char == "\t":
+            text += recommended_word
+        else:
+            text += char
     elif len(text) > 0:
         text = text[:-1]
