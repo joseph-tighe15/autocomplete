@@ -53,11 +53,11 @@ fn predict_next_with_fallback(before: &[HashMap<char, HashMap<String, usize>>], 
 }
 fn predict_next_word(before: &[HashMap<char, HashMap<String, usize>>], context: &str, temperature: f64) -> String {
     let mut output = String::new();
-    for i in 0..500 {
+    for _ in 0..500 {
         // Implementation for predicting the next word
-        let nextChar = predict_next_with_fallback(before, &(context.to_string() + &output), temperature);
-        output.push(nextChar);
-        if nextChar == ' ' {
+        let next_char = predict_next_with_fallback(before, &(context.to_string() + &output), temperature);
+        output.push(next_char);
+        if next_char == ' ' {
             break
         }
     }
@@ -65,10 +65,10 @@ fn predict_next_word(before: &[HashMap<char, HashMap<String, usize>>], context: 
 }
 fn predict_next_paragraph(before: &[HashMap<char, HashMap<String, usize>>], context: &str, temperature: f64) -> String {
     let mut output = String::new();
-    for i in 0..500 {
+    for _ in 0..500 {
         // Implementation for predicting the next word
-        let nextChar = predict_next_with_fallback(before, &(context.to_string() + &output), temperature);
-        output.push(nextChar);
+        let next_char = predict_next_with_fallback(before, &(context.to_string() + &output), temperature);
+        output.push(next_char);
     }
     output
 }
@@ -120,15 +120,15 @@ fn main() -> std::io::Result<()> {
     let mut text = ": ".to_string();
     let stdout = Term::buffered_stdout();
     println!("press R or N");
-    let mut realMode : bool = false;
+    let mut real_mode : bool = false;
     if let Ok(key) = stdout.read_char() {
         if key == 'R' || key == 'r' {
-            realMode = true;
+            real_mode = true;
         }
     }
     loop {
         let next;
-        if realMode {
+        if real_mode {
             next = predict_next_word(&before_list, &text, 15.0);
             
         } else {
